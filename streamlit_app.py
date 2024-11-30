@@ -6,7 +6,7 @@ import os
 
 st.set_page_config(page_title="Photo to Geo location guesser",
                    page_icon="📍",
-                   layout="centered",
+                   layout="wide",
                    initial_sidebar_state="expanded")
 
 st.header("Guess location from image")
@@ -15,7 +15,7 @@ with st.sidebar:
     st.header("Location guessing app")
     st.write("This app uses an LLM (Gemini) to take the image as input and guess the geo location for the provided photo.")
     st.header("How to use this app")
-    st.write("1. Uplaod a photo - jpg only (less than 2 MB)")
+    st.write("1. Upload a photo - jpg only (less than 2 MB)")
     st.write("2. Scroll down and click 'Guess the location!' button")
     st.write("3. Wait for a bit, it will show the output below the button")
 
