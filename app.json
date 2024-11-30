@@ -1,0 +1,10 @@
+{
+    "name": "image-to-geo-location-llm",
+    "hooks": {
+        "prebuild": {
+            "commands": [
+                "gcloud auth configure-docker --quiet --verbosity=error"
+            ]
+        }
+    }
+}
