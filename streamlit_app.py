@@ -2,7 +2,7 @@ import streamlit as st
 from PIL import Image
 import vertexai
 from vertexai.generative_models import GenerativeModel, Part, SafetySetting
-import time
+import os
 
 st.set_page_config(page_title="Photo to Geo location guesser",
                    page_icon="📍",
@@ -63,7 +63,10 @@ if uploaded_file is not None:
             ),
         ]
 
-        vertexai.init(project="test-proj-219922", location="us-central1")
+        PROJECT_ID = os.environ.get("GCP_PROJECT")
+        LOCATION = os.environ.get("GCP_REGION")
+
+        vertexai.init(project=PROJECT_ID, location=LOCATION)
         model = GenerativeModel(
             "gemini-1.5-pro-002",
         )
