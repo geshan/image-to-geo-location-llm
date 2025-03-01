@@ -1,7 +1,8 @@
 import streamlit as st
 from PIL import Image
-import vertexai
-from vertexai.generative_models import GenerativeModel, Part, SafetySetting
+from google import genai
+from google.genai import types
+
 import os
 
 st.set_page_config(page_title="Photo to Geo location guesser",
@@ -15,7 +16,7 @@ with st.sidebar:
     st.header("Location guessing app")
     st.write("This app uses an LLM (Gemini) to take the image as input and guess the geo location for the provided photo.")
     st.header("How to use this app")
-    st.write("1. Upload a photo - jpg only (less than 2 MB)")
+    st.write("1. Upload a photo - jpg only (less than 3 MB)")
     st.write("2. Scroll down and click 'Guess the location!' button")
     st.write("3. Wait for a bit, it will show the output below the button")
 
@@ -31,51 +32,56 @@ if uploaded_file is not None:
 
     if generate:
         st.write("let's guess the location now")
-        text1 = """You are an OSINT investigator. Your job is to geolocate where photos are taken. Provide the country, region, and city name of the location. If possible, pinpoint the exact location with latitude and longitude of where the photo was taken.  
-        
-            Always explain your methodology and how you came to the conclusion. Provide steps to verify your work also mention the percentage of how sure you are of the place you have identified it to be."""
-        image1 = Part.from_data(
-            mime_type="image/jpeg",
-            data=bytes_data)
-
-        generation_config = {
-            "max_output_tokens": 8192,
-            "temperature": 1,
-            "top_p": 0.95,
-        }
-
-        safety_settings = [
-            SafetySetting(
-                category=SafetySetting.HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-                threshold=SafetySetting.HarmBlockThreshold.OFF
-            ),
-            SafetySetting(
-                category=SafetySetting.HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-                threshold=SafetySetting.HarmBlockThreshold.OFF
-            ),
-            SafetySetting(
-                category=SafetySetting.HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-                threshold=SafetySetting.HarmBlockThreshold.OFF
-            ),
-            SafetySetting(
-                category=SafetySetting.HarmCategory.HARM_CATEGORY_HARASSMENT,
-                threshold=SafetySetting.HarmBlockThreshold.OFF
-            ),
-        ]
-
         PROJECT_ID = os.environ.get("GCP_PROJECT")
         LOCATION = os.environ.get("GCP_REGION")
 
-        vertexai.init(project=PROJECT_ID, location=LOCATION)
-        model = GenerativeModel(
-            "gemini-1.5-pro-002",
-        )
-        responses = model.generate_content(
-            [text1, image1],
-            generation_config=generation_config,
-            safety_settings=safety_settings,
-            stream=True,
+        client = genai.Client(
+            vertexai=True,
+            project=PROJECT_ID,
+            location=LOCATION,
         )
 
-        for response in responses:
-            st.write(response.text)
+        text1 = types.Part.from_text(text="""You are an OSINT investigator. Your job is to geolocate where the photos are taken. Provide the country, region, and city name of the location. Please pinpoint the exact location with latitude and longitude where the photo was taken.  
+
+        Could you always explain your methodology and how you concluded? Provide steps to verify your work. Also, mention the percentage of how sure you are of the place you have identified it to be and add a Google Maps link to the exact location.""")
+        image1 = types.Part.from_bytes(
+            data=bytes_data,
+            mime_type="image/jpeg"
+        )
+
+        model = "gemini-2.0-flash-001"
+        contents = [
+            types.Content(
+            role="user",
+            parts=[
+                text1,
+                image1
+            ]
+            )
+        ]
+        generate_content_config = types.GenerateContentConfig(
+            temperature = 0.1,
+            top_p = 0.5,
+            max_output_tokens = 4096,
+            response_modalities = ["TEXT"],
+            safety_settings = [types.SafetySetting(
+            category="HARM_CATEGORY_HATE_SPEECH",
+            threshold="OFF"
+            ),types.SafetySetting(
+            category="HARM_CATEGORY_DANGEROUS_CONTENT",
+            threshold="OFF"
+            ),types.SafetySetting(
+            category="HARM_CATEGORY_SEXUALLY_EXPLICIT",
+            threshold="OFF"
+            ),types.SafetySetting(
+            category="HARM_CATEGORY_HARASSMENT",
+            threshold="OFF"
+            )],
+        )
+    
+        for chunk in client.models.generate_content_stream(
+            model = model,
+            contents = contents,
+            config = generate_content_config,
+            ):
+            st.write(chunk.text)
