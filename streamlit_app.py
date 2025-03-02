@@ -35,7 +35,7 @@ if uploaded_file is not None:
         PROJECT_ID = os.environ.get("GOOGLE_CLOUD_PROJECT")
         LOCATION = os.environ.get("GOOGLE_CLOUD_REGION")
 
-        print("All available environment variables:")
+        print("All available environmentVariables:")
         print(os.environ)
 
         client = genai.Client(
