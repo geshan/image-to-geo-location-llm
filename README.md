@@ -15,3 +15,11 @@ This is how it looks when it runs:
 ## Deploy on Cloud Run
 
 [![Run on Google Cloud](https://deploy.cloud.run/button.svg)](https://deploy.cloud.run)
+
+### If button goes to Cloud Shell Quota issue
+
+Run the following on your Google Cloud Shell
+
+```bash
+cloudshell_open --repo_url "https://github.com/geshan/image-to-geo-location-llm.git" --git_branch "master" --page "shell" --force_new_clone
+```
