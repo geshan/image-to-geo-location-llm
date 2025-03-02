@@ -35,6 +35,9 @@ if uploaded_file is not None:
         PROJECT_ID = os.environ.get("GCP_PROJECT")
         LOCATION = os.environ.get("GCP_REGION")
 
+        print("All available environment variables:")
+        print(os.environ)
+
         client = genai.Client(
             vertexai=True,
             project=PROJECT_ID,
