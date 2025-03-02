@@ -32,8 +32,8 @@ if uploaded_file is not None:
 
     if generate:
         st.write("let's guess the location now")
-        PROJECT_ID = os.environ.get("GCP_PROJECT")
-        LOCATION = os.environ.get("GCP_REGION")
+        PROJECT_ID = os.environ.get("GOOGLE_CLOUD_PROJECT")
+        LOCATION = os.environ.get("GOOGLE_CLOUD_REGION")
 
         print("All available environment variables:")
         print(os.environ)
