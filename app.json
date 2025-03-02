@@ -1,0 +1,20 @@
+{
+  "name": "image-to-geo-location-llm",
+  "env": {      
+      "GOOGLE_CLOUD_PROJECT": {
+          "description": "You Google Cloud project ID",
+          "order": 100
+      },
+      "GOOGLE_CLOUD_REGION": {
+          "description": "The Google Cloud region you are deploying to",
+          "order": 150
+      }
+  },
+  "options": {
+      "allow-unauthenticated": true,
+      "memory": "512Mi",
+      "cpu": "1",
+      "concurrency": 500,
+      "max-instances": 4
+  }
+}
