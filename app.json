@@ -1,5 +1,5 @@
 {
-  "name": "image-to-geo-location",
+  "name": "image-to-geo-location-pch",
   "options": {
       "allow-unauthenticated": true,
       "memory": "512Mi",
