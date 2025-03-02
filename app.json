@@ -1,8 +1,14 @@
 {
-  "name": "image-to-geo-location-llm",
+  "name": "image-to-geo-location",
   "env": {
+      "GOOGLE_CLOUD_PROJECT": {
+          "description": "Your Google Cloud project ID",
+          "order": 100      
+      },
       "GOOGLE_CLOUD_REGION": {
           "description": "The Google Cloud region you are deploying to",
+          "value": "us-central1",
+          "required": false,
           "order": 150
       }
   },
@@ -12,12 +18,5 @@
       "cpu": "1",
       "concurrency": 500,
       "max-instances": 4
-  },
-  "hooks": {
-      "prebuild": {
-          "commands": [
-              "export GOOGLE_CLOUD_PROJECT=$(gcloud config get-value project)"
-          ]
-      }
-  }    
+  }
 }
