@@ -17,7 +17,7 @@ Could you always explain your methodology and how you concluded? Provide steps t
       mime_type="image/jpeg",
   )
 
-  model = "gemini-2.0-flash-001"
+  model = "gemini-2.0-flash-lite-001"
   contents = [
     types.Content(
       role="user",

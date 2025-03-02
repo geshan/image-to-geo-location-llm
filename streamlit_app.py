@@ -49,7 +49,7 @@ if uploaded_file is not None:
             mime_type="image/jpeg"
         )
 
-        model = "gemini-2.0-flash-001"
+        model = "gemini-2.0-flash-lite-001"
         contents = [
             types.Content(
             role="user",
