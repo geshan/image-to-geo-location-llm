@@ -1,22 +1,15 @@
 {
   "name": "image-to-geo-location",
-  "env": {
-      "GOOGLE_CLOUD_PROJECT": {
-          "description": "Your Google Cloud project ID",
-          "order": 100      
-      },
-      "GOOGLE_CLOUD_REGION": {
-          "description": "The Google Cloud region you are deploying to",
-          "value": "us-central1",
-          "required": false,
-          "order": 150
-      }
-  },
   "options": {
       "allow-unauthenticated": true,
       "memory": "512Mi",
       "cpu": "1",
       "concurrency": 500,
       "max-instances": 4
+  },
+  "hooks": {
+      "postcreate": [
+        "gcloud run deploy image-to-geo-location --project=$GOOGLE_CLOUD_PROJECT --platform=managed --region=$GOOGLE_CLOUD_REGION --image=$IMAGE_URL --allow-unauthenticated --memory=512Mi --cpu=1 --concurrency=500 --max-instances=4 --set-env-vars=GOOGLE_CLOUD_PROJECT=$GOOGLE_CLOUD_PROJECT,GOOGLE_CLOUD_REGION=$GOOGLE_CLOUD_REGION"
+      ]
   }
 }
